@@ -48,34 +48,19 @@
     const inputBox = document.getElementById('inputBox');
     const output = document.getElementById('output');
 
-    // 🔐 Store SHA-256 hashes of allowed codes
-  const secretHashes = {
-  // "underprime"
-  "6fc8e9225a012a3a2ff81f0e79282611b8a527f209f61a087cfb663c5d76077b": "Welcome to UNDERPRIME.",
-  // "blacksite"
-  "bd67f1c7cc03c94f23af6df24af908769e35b8e6c3a11a497d91db0037a2d346": "Access to BLACKSITE unlocked.",
-  // "revelation"
-  "ec9e14de58be24e8142d9f2b64f1309f64d5f69e05df95d124d3d8bb46257ad7": "REVELATION protocol engaged."
-};
+    const secretCodes = {
+      "underprime": "Welcome to UNDERPRIME.",
+      "blacksite": "Access to BLACKSITE unlocked.",
+      "revelation": "REVELATION protocol engaged."
+    };
 
-
-    async function hashInput(input) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(input);
-      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    inputBox.addEventListener("keydown", async function(event) {
+    inputBox.addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
         const userInput = inputBox.value.trim().toLowerCase();
         inputBox.value = "";
 
-        const hashedInput = await hashInput(userInput);
-
-        if (secretHashes[hashedInput]) {
-          output.textContent = `Access Granted.\n${secretHashes[hashedInput]}`;
+        if (secretCodes[userInput]) {
+          output.textContent = `Access Granted.\n${secretCodes[userInput]}`;
         } else {
           output.textContent = "Access Denied.\nTry again.";
         }
