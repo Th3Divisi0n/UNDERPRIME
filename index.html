@@ -1,72 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UNDERPRIME</title>
-  <style>
-    body {
-      background-color: black;
-      color: white;
-      font-family: monospace;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    #inputBox {
-      background-color: #111;
-      color: white;
-      border: none;
-      padding: 10px;
-      width: 300px;
-      font-size: 16px;
-      text-align: center;
-    }
-
-    #inputBox:focus {
-      outline: none;
-      box-shadow: 0 0 5px #0f0;
-    }
-
-    #output {
-      margin-top: 20px;
-      text-align: center;
-      white-space: pre-wrap;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Secret Code Terminal - Custom Alphabet</title>
+<style>
+  body {
+    background-color: black;
+    color: white;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  #inputBox {
+    background-color: #111;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 300px;
+    font-size: 16px;
+    text-align: center;
+  }
+  #inputBox:focus {
+    outline: none;
+    box-shadow: 0 0 5px #0f0;
+  }
+  #output {
+    margin-top: 20px;
+    text-align: center;
+    white-space: pre-wrap;
+    min-height: 40px;
+  }
+</style>
 </head>
 <body>
 
-  <input id="inputBox" type="text" placeholder="Enter secret code..." />
-  <div id="output"></div>
+<input id="inputBox" type="text" placeholder="Enter secret code..." autocomplete="off" />
+<div id="output"></div>
 
-  <script>
-    const inputBox = document.getElementById('inputBox');
-    const output = document.getElementById('output');
+<script>
+  // Your secret alphabet as per your Python example
+  const Secret_alphabet = [
+    "1", "2", "6", "5", "1", "8", "9", "3", "11", "4", "10", "15",
+    "13", "14", "12", "18", "16", "19", "17", "20", "22", "21", "24",
+    "25", "23", "26"
+  ];
+  const english_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const shift = 1;
 
-    const secretCodes = {
-      "underprime": "Welcome to UNDERPRIME.",
-      "blacksite": "Access to BLACKSITE unlocked.",
-      "revelation": "REVELATION protocol engaged."
-    };
+  // Build encode map (English letter => secret code)
+  const shifted_english_to_secret = {};
+  for (let i = 0; i < english_letters.length; i++) {
+    shifted_english_to_secret[english_letters[i]] = Secret_alphabet[(i + shift) % Secret_alphabet.length];
+  }
 
-    inputBox.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        const userInput = inputBox.value.trim().toLowerCase();
-        inputBox.value = "";
+  // Your secret codes ENCODED with this alphabet and shift.
+  // You must run the Python encode_message on your secret codes, then paste results here.
+  // For example: encode_message("underprime")
+  const storedEncodedSecrets = {
+    // Encoded "underprime"
+    "202516518918815": "Welcome to UNDERPRIME.",
+    // Encoded "blacksite"
+    "121118914611": "Access to BLACKSITE unlocked.",
+    // Encoded "revelation"
+    "15149172011181816": "REVELATION protocol engaged."
+  };
 
-        if (secretCodes[userInput]) {
-          output.textContent = `Access Granted.\n${secretCodes[userInput]}`;
-        } else {
-          output.textContent = "Access Denied.\nTry again.";
-        }
+  // Encode input text using your custom alphabet & shift
+  function encodeMessage(message) {
+    return [...message.toUpperCase()]
+      .map(ch => shifted_english_to_secret[ch] || ch)
+      .join("");
+  }
+
+  const inputBox = document.getElementById("inputBox");
+  const output = document.getElementById("output");
+
+  inputBox.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      const userInput = inputBox.value.trim();
+      inputBox.value = "";
+
+      const encodedInput = encodeMessage(userInput);
+
+      if (storedEncodedSecrets.hasOwnProperty(encodedInput)) {
+        output.textContent = `Access Granted.\n${storedEncodedSecrets[encodedInput]}`;
+      } else {
+        output.textContent = "Access Denied.\nTry again.";
       }
-    });
-  </script>
+    }
+  });
+</script>
 
 </body>
 </html>
