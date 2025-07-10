@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Secret Code Terminal - Custom Alphabet</title>
+<title>Secret Code Terminal</title>
 <style>
   body {
     background-color: black;
@@ -43,7 +43,7 @@
 <div id="output"></div>
 
 <script>
-  // Your secret alphabet as per your Python example
+  // Secret alphabet and shift
   const Secret_alphabet = [
     "1", "2", "6", "5", "1", "8", "9", "3", "11", "4", "10", "15",
     "13", "14", "12", "18", "16", "19", "17", "20", "22", "21", "24",
@@ -52,28 +52,24 @@
   const english_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const shift = 1;
 
-  // Build encode map (English letter => secret code)
+  // Build encode map: English letter => encoded number string
   const shifted_english_to_secret = {};
   for (let i = 0; i < english_letters.length; i++) {
     shifted_english_to_secret[english_letters[i]] = Secret_alphabet[(i + shift) % Secret_alphabet.length];
   }
 
-  // Your secret codes ENCODED with this alphabet and shift.
-  // You must run the Python encode_message on your secret codes, then paste results here.
-  // For example: encode_message("underprime")
+  // Stored secret codes as encoded number strings mapped to messages
+  // These are your encoded secret codes from "underprime", "blacksite", "revelation"
   const storedEncodedSecrets = {
-    // Encoded "underprime"
     "202516518918815": "Welcome to UNDERPRIME.",
-    // Encoded "blacksite"
     "121118914611": "Access to BLACKSITE unlocked.",
-    // Encoded "revelation"
     "15149172011181816": "REVELATION protocol engaged."
   };
 
-  // Encode input text using your custom alphabet & shift
+  // Encode user input string into number-string code
   function encodeMessage(message) {
     return [...message.toUpperCase()]
-      .map(ch => shifted_english_to_secret[ch] || ch)
+      .map(ch => shifted_english_to_secret[ch] || "")
       .join("");
   }
 
